@@ -1,0 +1,2 @@
+C:\Users\TIAN\Documents\2025\September\LSP\MacroPlayer\bin\Release\net8.0-windows\win-x64\publish\MacroPlayer.pdb
+C:\Users\TIAN\Documents\2025\September\LSP\MacroPlayer\bin\Release\net8.0-windows\win-x64\publish\MacroPlayer.exe
