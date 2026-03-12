@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "uPF6XsQ4sgA=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\TIAN\\Documents\\2026\\February\\quicker\\WheelMenu\\WheelMenu.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\TIAN\\.nuget\\packages\\communitytoolkit.mvvm\\8.2.0\\communitytoolkit.mvvm.8.2.0.nupkg.sha512",
+    "C:\\Users\\TIAN\\.nuget\\packages\\microsoft.win32.systemevents\\8.0.0\\microsoft.win32.systemevents.8.0.0.nupkg.sha512",
+    "C:\\Users\\TIAN\\.nuget\\packages\\system.drawing.common\\8.0.0\\system.drawing.common.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

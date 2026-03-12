@@ -1,0 +1,20 @@
+<Window x:Class="WheelMenu.Windows.WheelWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:renderer="clr-namespace:WheelMenu.Renderer"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        IsHitTestVisible="True"
+        WindowState="Maximized">
+    <Canvas x:Name="RootCanvas">
+        <renderer:DiskUIControl x:Name="WheelPreviewCanvas"
+                           RenderTransformOrigin="0.5,0.5">
+            <renderer:DiskUIControl.RenderTransform>
+                <ScaleTransform ScaleX="1" ScaleY="1"/>
+            </renderer:DiskUIControl.RenderTransform>
+        </renderer:DiskUIControl>
+    </Canvas>
+</Window>

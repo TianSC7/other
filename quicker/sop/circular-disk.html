@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圆盘扇区控制器</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 100vh;
+    font-family: 'Courier New', monospace;
+    color: #e0e0e0; gap: 20px;
+  }
+  h1 { font-size: 12px; letter-spacing: 4px; color: #444; text-transform: uppercase; }
+  .controls { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .toggle-btn {
+    background: #111; border: 1px solid #2a2a2a; color: #555;
+    padding: 7px 18px; font-family: 'Courier New', monospace;
+    font-size: 11px; letter-spacing: 2px; cursor: pointer;
+    transition: all 0.15s; text-transform: uppercase;
+  }
+  .toggle-btn.active { background: #0d1a10; border-color: #3a8a5a; color: #3a8a5a; }
+  .toggle-btn:hover { border-color: #555; color: #999; }
+  .disk-wrap { position: relative; width: 660px; height: 660px; }
+  svg { width: 100%; height: 100%; }
+  .sector { cursor: pointer; transition: opacity 0.12s; }
+  .sector:hover { opacity: 0.72; }
+  .sector.sel { opacity: 1; filter: brightness(1.8) saturate(1.4); }
+  .seg-label {
+    font-size: 9.5px; fill: rgba(255,255,255,0.55);
+    text-anchor: middle; dominant-baseline: middle;
+    pointer-events: none; font-family: 'Courier New', monospace;
+  }
+  .info {
+    background: #0c0c10; border: 1px solid #1e1e1e;
+    padding: 10px 22px; font-size: 11px; color: #555;
+    letter-spacing: 1px; min-width: 340px; text-align: center;
+  }
+  .info span { color: #4aaa88; }
+</style>
+</head>
+<body>
+<h1>Circular Sector Controller</h1>
+<div class="controls">
+  <button class="toggle-btn active" id="b1"  onclick="toggleRing(1)">圆1</button>
+  <button class="toggle-btn active" id="b2"  onclick="toggleRing(2)">环1</button>
+  <button class="toggle-btn active" id="b3"  onclick="toggleRing(3)">环2</button>
+  <button class="toggle-btn"        id="b4"  onclick="toggleRing(4)">环3</button>
+  <button class="toggle-btn"        id="b16" onclick="toggleOuter16()">外圈16</button>
+</div>
+<div class="disk-wrap">
+  <svg id="svg" viewBox="-330 -330 660 660"></svg>
+</div>
+<div class="info" id="info">点击扇区查看信息</div>
+
+<script>
+const NS  = "http://www.w3.org/2000/svg";
+const Rc  = 20;   // 圆1
+const R1  = 100;  // 环1外径
+const R2  = 200;  // 环2外径
+const R3  = 300;  // 环3外径
+const ROT = 22.5; // 整盘旋转
+
+// 几何起始角（不动）
+const START = -90;
+const S8  = 45;
+const S16 = 22.5;
+
+// ── 编号偏移 ──────────────────────────────────────────────
+// 环1：用户说"当前8的位置"作为起点 → 原来idx=0画的是扇区1，
+//      现在要让idx=0处显示扇区8之后的下一个，即从"8所在格"开始编1
+//      8在第7格(idx=7)，所以起点偏移 = 7格 → 新编号 = ((i+7)%8)+1
+// 编号偏移：让1/9/33分别出现在12点位置
+// 12点视觉 = -90° = 旋转组内逻辑角 -90 - ROT = -112.5°
+// START=-90，格子idx的起始角 = -90 + idx*45
+// 哪个idx最接近-112.5°？ idx=(-112.5-(-90))/45 = -22.5/45 = -0.5 → idx=0最近（-90°）
+// idx=0的格子在视觉-90+22.5=-67.5°（约1点半），还差约1.5格才到12点
+// 12点视觉=-90° → 逻辑角=-90-22.5=-112.5° → 最近的格子逻辑起始：
+//   idx=7: -90+7*45=225°=−135°? 不，-90+315=225，225+22.5=247.5°（约8点）
+//   实际上旋转后格子i中点视觉角 = (START + (i+0.5)*STEP) + ROT
+// 要让格子i的"中点"在-90°（12点）：
+//   (START + (i+0.5)*S8) + ROT = -90
+//   (-90 + (i+0.5)*45) + 22.5 = -90
+//   (i+0.5)*45 = -22.5
+//   i+0.5 = -0.5 → i = -1 → i=7(mod 8)
+// 所以idx=7的格子中点在12点！
+// 要让idx=7显示编号1 → OFF使 ((7+OFF)%8)+1=1 → (7+OFF)%8=0 → OFF=1
+const OFF_R1    = 1;
+const OFF_R2_8  = 1;
+const OFF_R2_16 = 1;  // 16格时同理，idx=15中点在12点，((15+1)%16)=0 → 编9 ✓
+const OFF_R3    = 1;
+
+let visible = {1:true, 2:true, 3:true, 4:false};
+let outer16  = false;
+let selEl    = null;
+
+const svg = document.getElementById('svg');
+
+function mkEl(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k,v] of Object.entries(attrs)) e.setAttribute(k,v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function pt(r, deg) {
+  const rad = deg * Math.PI / 180;
+  return [r*Math.cos(rad), r*Math.sin(rad)];
+}
+function annPath(r1, r2, startDeg, span) {
+  const endDeg = startDeg + span;
+  const la = span > 180 ? 1 : 0;
+  if (r1 === 0) {
+    const [x2s,y2s]=pt(r2,startDeg),[x2e,y2e]=pt(r2,endDeg);
+    return `M 0 0 L ${x2s} ${y2s} A ${r2} ${r2} 0 ${la} 1 ${x2e} ${y2e} Z`;
+  }
+  const [x1s,y1s]=pt(r1,startDeg),[x1e,y1e]=pt(r1,endDeg);
+  const [x2s,y2s]=pt(r2,startDeg),[x2e,y2e]=pt(r2,endDeg);
+  return `M ${x2s} ${y2s} A ${r2} ${r2} 0 ${la} 1 ${x2e} ${y2e} L ${x1e} ${y1e} A ${r1} ${r1} 0 ${la} 0 ${x1s} ${y1s} Z`;
+}
+function divLine(r1, r2, deg, stroke, sw, parent) {
+  const [x1,y1]=pt(r1,deg),[x2,y2]=pt(r2,deg);
+  mkEl('line',{x1,y1,x2,y2,stroke,'stroke-width':sw,'stroke-linecap':'round',opacity:'0.85'},parent);
+}
+function midPt(r1, r2, startDeg, span) {
+  const [x,y] = pt((r1+r2)/2, startDeg + span/2);
+  return {x,y};
+}
+
+// 8条基础分割线角度（在旋转组内，几何位置不变）
+const divA8  = Array.from({length:8}, (_,i) => START + i*S8);
+const divA16 = divA8.map(a => a + S16);
+
+function render() {
+  svg.innerHTML = '';
+  const g = mkEl('g',{transform:`rotate(${ROT})`},svg);
+
+  // ── 环3（R200~R300）8扇区，编号33-40，无分割线无标签 ──
+  if (visible[4]) {
+    for (let i=0; i<8; i++) {
+      const sA  = START + i*S8;
+      const sid = ((i + OFF_R3) % 8) + 33; // 33-40，从偏移位置开始
+      const p = mkEl('path',{
+        d: annPath(R2,R3,sA,S8), class:'sector',
+        fill: i%2===0?'#1f1018':'#231220',
+        stroke:'#160b16','stroke-width':'0.5'
+      },g);
+      p.dataset.sid=sid; p.dataset.ring=4;
+      p.dataset.idx=i;   p.dataset.step=S8;
+      p.addEventListener('click',onSec);
+    }
+    mkEl('circle',{cx:0,cy:0,r:R3,fill:'none',stroke:'#3a1535','stroke-width':'1',opacity:'0.5'},g);
+  }
+
+  // ── 环2（R100~R200）8或16扇区，编号9-16 / 9-24 ──
+  if (visible[3]) {
+    const cnt = outer16 ? 16 : 8;
+    const stp = outer16 ? S16 : S8;
+    const off = outer16 ? OFF_R2_16 : OFF_R2_8;
+    for (let i=0; i<cnt; i++) {
+      const sA  = START + i*stp;
+      const sid = ((i + off) % cnt) + 9; // 9-16 or 9-24
+      const p = mkEl('path',{
+        d: annPath(R1,R2,sA,stp), class:'sector',
+        fill: i%2===0?'#140f24':'#17122a',
+        stroke:'#0e0a18','stroke-width':'0.4'
+      },g);
+      p.dataset.sid=sid; p.dataset.ring=3;
+      p.dataset.idx=i;   p.dataset.step=stp;
+      p.addEventListener('click',onSec);
+
+      const {x,y}=midPt(R1,R2,sA,stp);
+      const lbl=mkEl('text',{x,y,class:'seg-label'},g);
+      lbl.textContent=sid;
+      lbl.setAttribute('transform',`rotate(${-ROT},${x},${y})`);
+    }
+    divA8.forEach(a=>divLine(R1,R2,a,'#5a3a8a',1.2,g));
+    if (outer16) divA16.forEach(a=>divLine(R1,R2,a,'#4a2a6a',0.8,g));
+    mkEl('circle',{cx:0,cy:0,r:R2,fill:'none',stroke:'#2a1a4a','stroke-width':'1',opacity:'0.5'},g);
+  }
+
+  // ── 环1（R20~R100）8扇区，编号1-8 ──
+  if (visible[2]) {
+    for (let i=0; i<8; i++) {
+      const sA  = START + i*S8;
+      const sid = ((i + OFF_R1) % 8) + 1; // 1-8，从偏移位置开始
+      const p = mkEl('path',{
+        d: annPath(Rc,R1,sA,S8), class:'sector',
+        fill: i%2===0?'#0c1e12':'#0f2015',
+        stroke:'#091510','stroke-width':'0.4'
+      },g);
+      p.dataset.sid=sid; p.dataset.ring=2;
+      p.dataset.idx=i;   p.dataset.step=S8;
+      p.addEventListener('click',onSec);
+
+      const {x,y}=midPt(Rc,R1,sA,S8);
+      const lbl=mkEl('text',{x,y,class:'seg-label'},g);
+      lbl.textContent=sid;
+      lbl.setAttribute('transform',`rotate(${-ROT},${x},${y})`);
+    }
+    divA8.forEach(a=>divLine(Rc,R1,a,'#2a7a4a',1.2,g));
+    mkEl('circle',{cx:0,cy:0,r:R1,fill:'none',stroke:'#1a5a2a','stroke-width':'1',opacity:'0.5'},g);
+  }
+
+  // ── 圆1（整圆R20）无分割线 ──
+  if (visible[1]) {
+    const c=mkEl('circle',{
+      cx:0,cy:0,r:Rc,
+      fill:'#0a1828',stroke:'#1a5a8a','stroke-width':'1.2',class:'sector'
+    },g);
+    c.addEventListener('click',()=>{
+      if(selEl) selEl.classList.remove('sel');
+      selEl=c; c.classList.add('sel');
+      document.getElementById('info').innerHTML='圆1 <span>#中心</span> · R=20 · 无分割';
+    });
+  }
+
+  mkEl('circle',{cx:0,cy:0,r:R3+3,fill:'none',stroke:'#1a1a1a','stroke-width':'1.5'},svg);
+  mkEl('circle',{cx:0,cy:0,r:2.5,fill:'#4aaa88',opacity:'0.9'},g);
+
+  selEl=null;
+  document.getElementById('info').innerHTML='点击扇区查看信息';
+}
+
+function onSec(e) {
+  if(selEl) selEl.classList.remove('sel');
+  selEl=e.currentTarget; selEl.classList.add('sel');
+  const {sid,ring,idx,step}=selEl.dataset;
+  const sL = START + Number(idx)*Number(step);
+  const norm = a => ((a+ROT)%360+360)%360;
+  const sA = norm(sL).toFixed(1);
+  const eA = norm(sL+Number(step)).toFixed(1);
+  const mA = norm(sL+Number(step)/2).toFixed(1);
+  const rName=['','圆1','环1','环2','环3'][ring];
+  document.getElementById('info').innerHTML=
+    `扇区 <span>#${sid}</span> · ${rName} · 起 <span>${sA}°</span> → 止 <span>${eA}°</span> · 中线 <span>${mA}°</span>`;
+}
+
+function toggleRing(n) {
+  visible[n]=!visible[n];
+  document.getElementById(['','b1','b2','b3','b4'][n]).classList.toggle('active',visible[n]);
+  render();
+}
+function toggleOuter16() {
+  outer16=!outer16;
+  document.getElementById('b16').classList.toggle('active',outer16);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

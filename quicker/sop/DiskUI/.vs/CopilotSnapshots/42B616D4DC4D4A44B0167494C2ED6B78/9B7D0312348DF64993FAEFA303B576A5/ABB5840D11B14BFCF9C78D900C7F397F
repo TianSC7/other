@@ -1,0 +1,82 @@
+﻿<Window x:Class="DiskUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="圆盘扇区控制器"
+        Width="800" Height="860"
+        Background="#0a0a0f"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize">
+
+    <Window.Resources>
+        <Style x:Key="ToggleStyle" TargetType="ToggleButton">
+            <Setter Property="Background" Value="#111111"/>
+            <Setter Property="Foreground" Value="#555555"/>
+            <Setter Property="BorderBrush" Value="#2a2a2a"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="16,6"/>
+            <Setter Property="FontFamily" Value="Courier New"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Background" Value="#0d1a10"/>
+                                <Setter Property="BorderBrush" Value="#3a8a5a"/>
+                                <Setter Property="Foreground" Value="#3a8a5a"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="#555555"/>
+                                <Setter Property="Foreground" Value="#999999"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题 -->
+        <TextBlock Grid.Row="0" Text="CIRCULAR SECTOR CONTROLLER"
+                   Foreground="#333333" FontFamily="Courier New" FontSize="11"
+                   LetterSpacing="4" HorizontalAlignment="Center" Margin="0,20,0,16"/>
+
+        <!-- 控制按钮 -->
+        <WrapPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,16" Gap="10">
+            <ToggleButton x:Name="BtnCircle1" Content="圆1"    IsChecked="True" Style="{StaticResource ToggleStyle}" Checked="OnToggle" Unchecked="OnToggle"/>
+            <ToggleButton x:Name="BtnRing1"   Content="环1"    IsChecked="True" Style="{StaticResource ToggleStyle}" Checked="OnToggle" Unchecked="OnToggle"/>
+            <ToggleButton x:Name="BtnRing2"   Content="环2"    IsChecked="True" Style="{StaticResource ToggleStyle}" Checked="OnToggle" Unchecked="OnToggle"/>
+            <ToggleButton x:Name="BtnRing3"   Content="环3"    IsChecked="False" Style="{StaticResource ToggleStyle}" Checked="OnToggle" Unchecked="OnToggle"/>
+            <ToggleButton x:Name="BtnOuter16" Content="外圈16" IsChecked="False" Style="{StaticResource ToggleStyle}" Checked="OnToggle" Unchecked="OnToggle"/>
+        </WrapPanel>
+
+        <!-- 圆盘画布 -->
+        <Viewbox Grid.Row="2" Margin="20">
+            <Canvas x:Name="DiskCanvas" Width="700" Height="700"
+                    ClipToBounds="False"/>
+        </Viewbox>
+
+        <!-- 信息栏 -->
+        <Border Grid.Row="3" Background="#0c0c10" BorderBrush="#1e1e1e" BorderThickness="1"
+                Margin="60,0,60,20" Padding="16,10">
+            <TextBlock x:Name="InfoText" Text="点击扇区查看信息"
+                       Foreground="#555555" FontFamily="Courier New" FontSize="11"
+                       HorizontalAlignment="Center"/>
+        </Border>
+    </Grid>
+</Window>

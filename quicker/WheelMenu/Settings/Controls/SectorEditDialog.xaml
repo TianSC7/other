@@ -1,0 +1,91 @@
+<Window x:Class="WheelMenu.Settings.Controls.SectorEditDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:WheelMenu.Settings.Controls"
+        Title="设置动作"
+        Width="480"
+        Height="400"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+    </Window.Resources>
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="{Binding PositionLabel}"
+                   FontWeight="Bold" Margin="0,0,0,8"/>
+
+        <ComboBox Grid.Row="1"
+                  ItemsSource="{Binding ActionTypeOptions}"
+                  SelectedItem="{Binding SelectedActionType}"
+                  DisplayMemberPath="DisplayName"
+                  Margin="0,0,0,12"/>
+
+        <ScrollViewer Grid.Row="2">
+            <StackPanel>
+                <controls:KeyRecorderBox
+                    Visibility="{Binding IsHotkeyType, Converter={StaticResource BoolToVisConverter}}"
+                    KeyText="{Binding HotkeyValue, Mode=TwoWay}"/>
+
+                <TextBox Visibility="{Binding IsTextType, Converter={StaticResource BoolToVisConverter}}"
+                         Text="{Binding TextValue}" AcceptsReturn="True"
+                         Height="80" TextWrapping="Wrap"/>
+
+                <DockPanel Visibility="{Binding IsOpenType, Converter={StaticResource BoolToVisConverter}}">
+                    <Button DockPanel.Dock="Right" Content="浏览..."
+                            Command="{Binding BrowseCommand}"/>
+                    <TextBox Text="{Binding OpenValue}"/>
+                </DockPanel>
+
+                <StackPanel Visibility="{Binding IsRunActionType, Converter={StaticResource BoolToVisConverter}}">
+                    <Button Content="{Binding SelectedActionDisplay}"
+                            Command="{Binding SelectActionCommand}"/>
+                    <TextBlock Text="⚠️ 删除原始动作后此处失联"
+                               Foreground="OrangeRed" FontSize="11"/>
+                    <TextBox Text="{Binding ActionParam}"/>
+                </StackPanel>
+
+                <StackPanel Visibility="{Binding IsDateTimeType, Converter={StaticResource BoolToVisConverter}}">
+                    <TextBox Text="{Binding DateTimeFormat, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="{Binding DateTimePreview}"
+                               Foreground="Gray" FontSize="11"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Grid Grid.Row="3" Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" Width="28" Height="28"
+                    Background="#F0F0F0" BorderBrush="Gray" BorderThickness="1">
+                <Image Source="{Binding IconPreview}"/>
+            </Border>
+            <Button Grid.Column="1" Content="更换图标" Margin="8,0,0,0"
+                    Command="{Binding ChangeIconCommand}"/>
+            <Button Grid.Column="2" Content="清除" Margin="4,0,0,0"
+                    Command="{Binding ClearIconCommand}"/>
+        </Grid>
+
+        <TextBox Grid.Row="4" Margin="0,8,0,0"
+                 Text="{Binding CustomLabel}"/>
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal"
+                    HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button Content="确定" Width="80" IsDefault="True"
+                    Command="{Binding OkCommand}"/>
+            <Button Content="取消" Width="80" Margin="8,0,0,0"
+                    IsCancel="True" Command="{Binding CancelCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

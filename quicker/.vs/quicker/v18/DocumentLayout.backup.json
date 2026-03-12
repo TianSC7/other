@@ -1,0 +1,111 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\TIAN\\Documents\\2026\\February\\quicker\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0E7ED9BF-D74C-CAF0-C57F-57D30AEE1148}|WheelMenu\\WheelMenu.csproj|c:\\users\\tian\\documents\\2026\\february\\quicker\\wheelmenu\\windows\\settingswindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E7ED9BF-D74C-CAF0-C57F-57D30AEE1148}|WheelMenu\\WheelMenu.csproj|solutionrelative:wheelmenu\\windows\\settingswindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E7ED9BF-D74C-CAF0-C57F-57D30AEE1148}|WheelMenu\\WheelMenu.csproj|c:\\users\\tian\\documents\\2026\\february\\quicker\\wheelmenu\\windows\\settingswindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{0E7ED9BF-D74C-CAF0-C57F-57D30AEE1148}|WheelMenu\\WheelMenu.csproj|solutionrelative:wheelmenu\\windows\\settingswindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E7ED9BF-D74C-CAF0-C57F-57D30AEE1148}|WheelMenu\\WheelMenu.csproj|c:\\users\\tian\\documents\\2026\\february\\quicker\\wheelmenu\\themes\\lighttheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{0E7ED9BF-D74C-CAF0-C57F-57D30AEE1148}|WheelMenu\\WheelMenu.csproj|solutionrelative:wheelmenu\\themes\\lighttheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E7ED9BF-D74C-CAF0-C57F-57D30AEE1148}|WheelMenu\\WheelMenu.csproj|c:\\users\\tian\\documents\\2026\\february\\quicker\\wheelmenu\\windows\\wheelwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{0E7ED9BF-D74C-CAF0-C57F-57D30AEE1148}|WheelMenu\\WheelMenu.csproj|solutionrelative:wheelmenu\\windows\\wheelwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E7ED9BF-D74C-CAF0-C57F-57D30AEE1148}|WheelMenu\\WheelMenu.csproj|c:\\users\\tian\\documents\\2026\\february\\quicker\\wheelmenu\\windows\\testwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{0E7ED9BF-D74C-CAF0-C57F-57D30AEE1148}|WheelMenu\\WheelMenu.csproj|solutionrelative:wheelmenu\\windows\\testwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 270,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SettingsWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\TIAN\\Documents\\2026\\February\\quicker\\WheelMenu\\Windows\\SettingsWindow.xaml.cs",
+              "RelativeDocumentMoniker": "WheelMenu\\Windows\\SettingsWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\TIAN\\Documents\\2026\\February\\quicker\\WheelMenu\\Windows\\SettingsWindow.xaml.cs",
+              "RelativeToolTip": "WheelMenu\\Windows\\SettingsWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIoCAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-11T04:01:58.987Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "WheelWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\TIAN\\Documents\\2026\\February\\quicker\\WheelMenu\\Windows\\WheelWindow.xaml",
+              "RelativeDocumentMoniker": "WheelMenu\\Windows\\WheelWindow.xaml",
+              "ToolTip": "C:\\Users\\TIAN\\Documents\\2026\\February\\quicker\\WheelMenu\\Windows\\WheelWindow.xaml",
+              "RelativeToolTip": "WheelMenu\\Windows\\WheelWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-03-11T03:55:55.772Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SettingsWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\TIAN\\Documents\\2026\\February\\quicker\\WheelMenu\\Windows\\SettingsWindow.xaml",
+              "RelativeDocumentMoniker": "WheelMenu\\Windows\\SettingsWindow.xaml",
+              "ToolTip": "C:\\Users\\TIAN\\Documents\\2026\\February\\quicker\\WheelMenu\\Windows\\SettingsWindow.xaml",
+              "RelativeToolTip": "WheelMenu\\Windows\\SettingsWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-03-11T03:55:44.316Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TestWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\TIAN\\Documents\\2026\\February\\quicker\\WheelMenu\\Windows\\TestWindow.xaml",
+              "RelativeDocumentMoniker": "WheelMenu\\Windows\\TestWindow.xaml",
+              "ToolTip": "C:\\Users\\TIAN\\Documents\\2026\\February\\quicker\\WheelMenu\\Windows\\TestWindow.xaml",
+              "RelativeToolTip": "WheelMenu\\Windows\\TestWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-03-11T03:55:54.229Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "LightTheme.xaml",
+              "DocumentMoniker": "C:\\Users\\TIAN\\Documents\\2026\\February\\quicker\\WheelMenu\\Themes\\LightTheme.xaml",
+              "RelativeDocumentMoniker": "WheelMenu\\Themes\\LightTheme.xaml",
+              "ToolTip": "C:\\Users\\TIAN\\Documents\\2026\\February\\quicker\\WheelMenu\\Themes\\LightTheme.xaml",
+              "RelativeToolTip": "WheelMenu\\Themes\\LightTheme.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-03-11T03:56:23.341Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 130,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
